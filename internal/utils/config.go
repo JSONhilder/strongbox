@@ -4,9 +4,10 @@ import "github.com/spf13/viper"
 
 type Config struct {
 	Version string `mapstructure:"VERSION"`
+	DbPath  string `mapstructure:"DB_PATH"`
 }
 
-func LoadConfig(path string) (config Config, err error) {
+func LoadConfig(path string) (config *Config, err error) {
 	viper.AddConfigPath(path)
 	viper.SetConfigName("app")
 	viper.SetConfigType("env")
