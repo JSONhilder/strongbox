@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/JSONhilder/strongbox/internal/database"
 	"github.com/spf13/cobra"
 )
 
@@ -13,11 +14,7 @@ var get = &cobra.Command{
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Not implented")
-		if len(args) > 0 {
-			fmt.Printf("First arg passed: %s", args[0])
-			fmt.Println()
-			fmt.Printf("All args: %v", args)
-		}
+		database.GetAccount(args[0])
 	},
 }
 
