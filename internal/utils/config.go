@@ -3,8 +3,8 @@ package utils
 import "github.com/spf13/viper"
 
 type Config struct {
-	Version string `mapstructure:"VERSION"`
-	DbPath  string `mapstructure:"DB_PATH"`
+	Version  string `mapstructure:"VERSION"`
+	FilePath string `mapstructure:"FILE_PATH"`
 }
 
 func LoadConfig(path string) (config *Config, err error) {

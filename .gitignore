@@ -1,4 +1,5 @@
 notes.txt
 app.env
 /cmd/add.go
-/internal/database/strongbox.json
+/strongbox
+todo

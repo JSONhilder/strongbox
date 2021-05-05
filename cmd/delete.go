@@ -17,35 +17,33 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 
-	"github.com/JSONhilder/strongbox/internal/utils"
+	"github.com/JSONhilder/strongbox/internal/database"
 	"github.com/spf13/cobra"
 )
 
-// versionCmd represents the version command
-var versionCmd = &cobra.Command{
-	Use:   "version",
-	Short: "Current Strongbox version",
+// deleteCmd represents the delete command
+var deleteCmd = &cobra.Command{
+	Use:   "delete",
+	Short: "Delete account by name from stronbox",
+	Long:  `Delete account with passed as argument name from stronbox`,
+	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		config, err := utils.LoadConfig(".")
-		if err != nil {
-			log.Fatal("Cannot load config: ", err)
-		}
-
-		fmt.Println("strongbox version: ", config.Version)
+		fmt.Println("delete called")
+		database.DeleteAccount(args[0])
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(deleteCmd)
+
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// versionCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// deleteCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// versionCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// deleteCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
