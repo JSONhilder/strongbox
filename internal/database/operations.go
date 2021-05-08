@@ -4,7 +4,6 @@ import (
 	"fmt"
 )
 
-//@TODO all crud operations in here
 func ListAccounts() {
 	if strongbox.Accounts == nil {
 		fmt.Println("No accounts in database")
@@ -45,6 +44,43 @@ func CreateAccount(newAccount Account) {
 }
 
 func EditAccount(name string) {
+	index, found := doesAccountExist(name)
+
+	if found == true {
+		account := strongbox.Accounts[index]
+		var username string
+		var password string
+		var url string
+
+		fmt.Println("Edit to update or leave blank to not change.")
+		fmt.Printf("username: %s\n", account.Username)
+		fmt.Scanln(&username)
+
+		fmt.Printf("password: %s\n", account.Password)
+		fmt.Scanln(&password)
+
+		fmt.Printf("url: %s\n", account.Url)
+		fmt.Scanln(&url)
+
+		if len(username) != 0 {
+			account.Username = username
+		}
+
+		if len(password) != 0 {
+			account.Password = password
+		}
+
+		if len(url) != 0 {
+			account.Url = url
+		}
+
+		strongbox.Accounts[index] = account
+		writeData(strongbox)
+
+		return
+	}
+
+	fmt.Printf("No account with name: %s exists.", name)
 
 }
 
@@ -56,6 +92,8 @@ func DeleteAccount(name string) {
 		writeData(strongbox)
 		return
 	}
+
+	fmt.Printf("No account with name: %s exists.", name)
 }
 
 func doesAccountExist(name string) (index int, found bool) {
@@ -64,6 +102,6 @@ func doesAccountExist(name string) (index int, found bool) {
 			return index, true
 		}
 	}
-	fmt.Printf("No account with name: %s exists.", name)
+
 	return -1, false
 }
