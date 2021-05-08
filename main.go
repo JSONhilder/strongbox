@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/JSONhilder/strongbox/cmd"
 	"github.com/JSONhilder/strongbox/internal/database"
@@ -15,7 +16,14 @@ func init() {
 		log.Println("No config file found.")
 	}
 
-	database.OpenDb(config)
+	if os.Args[1] != "version" {
+		database.OpenDb(config)
+		if database.GainAccess() == true {
+			return
+		} else {
+			os.Exit(0)
+		}
+	}
 }
 
 func main() {
