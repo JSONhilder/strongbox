@@ -2,9 +2,12 @@ package database
 
 import (
 	"fmt"
+
+	"github.com/JSONhilder/strongbox/internal/crypt"
 )
 
 func ListAccounts() {
+	key := constructKey()
 	if strongbox.Accounts == nil {
 		fmt.Println("No accounts in database")
 		fmt.Println("Create one with the save command")
@@ -14,28 +17,37 @@ func ListAccounts() {
 	fmt.Println("Stronbox Accounts")
 	fmt.Println("-----------------")
 	for index, acc := range strongbox.Accounts {
-		fmt.Printf("%d: %s\n", index, acc.Name)
+		fmt.Printf("%d: %s\n", index, crypt.DecryptKey(acc.Name, key))
 	}
 }
 
 func GetAccount(name string) {
-	for _, acc := range strongbox.Accounts {
-		if acc.Name == name {
-			if acc.Url == "" {
-				acc.Url = "none"
-			}
-			fmt.Printf("username: %s \npassword: %s \nUrl: %s", acc.Username, acc.Password, acc.Url)
-			return // return here to stop extra looping
-		}
+	index, found, key := doesAccountExist(name)
+
+	if found == true {
+		account := strongbox.Accounts[index]
+		fmt.Printf(
+			"username: %s \npassword: %s \nurl: %s",
+			crypt.DecryptKey(account.Username, key),
+			crypt.DecryptKey(account.Password, key),
+			crypt.DecryptKey(account.Url, key),
+		)
+		return
 	}
 	fmt.Printf("Could not find account with name: %s", name)
 }
 
 func CreateAccount(newAccount Account) {
-	_, found := doesAccountExist(newAccount.Name)
+	_, found, key := doesAccountExist(newAccount.Name)
 
 	if found == false {
-		strongbox.Accounts = append(strongbox.Accounts, newAccount)
+		encrypted := Account{
+			Name:     crypt.EncryptKey(newAccount.Name, key),
+			Username: crypt.EncryptKey(newAccount.Username, key),
+			Password: crypt.EncryptKey(newAccount.Password, key),
+			Url:      crypt.EncryptKey(newAccount.Url, key),
+		}
+		strongbox.Accounts = append(strongbox.Accounts, encrypted)
 		writeData(strongbox)
 		return
 	}
@@ -44,7 +56,7 @@ func CreateAccount(newAccount Account) {
 }
 
 func EditAccount(name string) {
-	index, found := doesAccountExist(name)
+	index, found, _ := doesAccountExist(name)
 
 	if found == true {
 		account := strongbox.Accounts[index]
@@ -85,7 +97,7 @@ func EditAccount(name string) {
 }
 
 func DeleteAccount(name string) {
-	index, found := doesAccountExist(name)
+	index, found, _ := doesAccountExist(name)
 
 	if found == true {
 		strongbox.Accounts = append(strongbox.Accounts[:index], strongbox.Accounts[index+1:]...)
@@ -96,12 +108,13 @@ func DeleteAccount(name string) {
 	fmt.Printf("No account with name: %s exists.", name)
 }
 
-func doesAccountExist(name string) (index int, found bool) {
+func doesAccountExist(name string) (index int, found bool, skey string) {
+	key := constructKey()
 	for index, acc := range strongbox.Accounts {
-		if acc.Name == name {
-			return index, true
+		if crypt.DecryptKey(acc.Name, key) == name {
+			return index, true, key
 		}
 	}
 
-	return -1, false
+	return -1, false, key
 }
