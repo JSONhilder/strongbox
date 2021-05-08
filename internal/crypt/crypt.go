@@ -3,7 +3,10 @@ package crypt
 import (
 	"crypto/aes"
 	"crypto/cipher"
+	_rand "crypto/rand"
+	"encoding/hex"
 	"fmt"
+	"io"
 	"log"
 	"math/rand"
 	"strings"
@@ -24,7 +27,7 @@ func VerifyHash(hash string, plainPwd []byte) bool {
 	byteHash := []byte(hash)
 	err := bcrypt.CompareHashAndPassword(byteHash, plainPwd)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("Incorrect password.")
 		return false
 	}
 
@@ -62,14 +65,16 @@ func EncryptKey(text, key string) string {
 	}
 
 	nonce := make([]byte, aesGCM.NonceSize())
+	if _, err = io.ReadFull(_rand.Reader, nonce); err != nil {
+		log.Fatal(err)
+	}
 
 	cipherText := aesGCM.Seal(nonce, nonce, toEncrypt, nil)
-
 	return fmt.Sprintf("%x", cipherText)
 }
 
 func DecryptKey(encryptedText, key string) string {
-	toDecrypt := []byte(encryptedText)
+	toDecrypt, _ := hex.DecodeString(encryptedText)
 	theKey := []byte(key)
 
 	block, err := aes.NewCipher(theKey)
