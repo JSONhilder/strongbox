@@ -26,6 +26,7 @@ type Account struct {
 }
 
 var strongbox Header
+var verification string
 
 // OpenDb -
 func OpenDb(config *utils.Config) {
@@ -67,8 +68,6 @@ func fileExists(filename string) bool {
 
 func createStrongbox(filename string) {
 	header := buildHeader()
-
-	// fmt.Println(header)
 
 	f, err := os.Create(filename)
 	if err != nil {
@@ -116,9 +115,7 @@ func buildHeader() Header {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	salt := crypt.GenerateKey(32)
-	fmt.Println(len(salt))
 
 	header := Header{
 		Hk:       string(hash),
@@ -127,6 +124,26 @@ func buildHeader() Header {
 	}
 
 	return header
+}
+
+func GainAccess() bool {
+	var input string
+	fmt.Println("Please enter your master password:")
+	fmt.Scan(&input)
+	master := []byte(input)
+
+	if crypt.VerifyHash(strongbox.Hk, master) == true {
+		verification = input
+		return true
+	}
+
+	return false
+}
+
+func constructKey() string {
+	pk := strongbox.Sk[(len(verification) + 1):]
+	pk = (pk + "." + verification)
+	return pk
 }
 
 // @TODO - func exportDb
