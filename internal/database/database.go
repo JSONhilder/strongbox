@@ -2,9 +2,11 @@ package database
 
 import (
 	"encoding/gob"
+	"fmt"
 	"log"
 	"os"
 
+	"github.com/JSONhilder/strongbox/internal/crypt"
 	"github.com/JSONhilder/strongbox/internal/utils"
 )
 
@@ -31,9 +33,10 @@ func OpenDb(config *utils.Config) {
 	if err != nil {
 		log.Fatal("Cannot load config: ", err)
 	}
+
 	// Checks if file exists first, if not create new one
-	// @TODO: generate hash and salt from users master password
 	if !fileExists(config.FilePath) {
+		// @TODO: generate hash and salt from users master password
 		createStrongbox(config.FilePath)
 	}
 
@@ -44,6 +47,8 @@ func OpenDb(config *utils.Config) {
 	defer f.Close()
 
 	dec := gob.NewDecoder(f)
+	// @TODO: before initialising global strongbox check the header has what it
+	// needs
 
 	// Send data to global strongbox
 	if err := dec.Decode(&strongbox); err != nil {
@@ -61,12 +66,9 @@ func fileExists(filename string) bool {
 }
 
 func createStrongbox(filename string) {
-	var accounts []Account
-	header := Header{
-		Hk:       "testHash",
-		Sk:       "testSalt",
-		Accounts: accounts,
-	}
+	header := buildHeader()
+
+	// fmt.Println(header)
 
 	f, err := os.Create(filename)
 	if err != nil {
@@ -100,6 +102,31 @@ func writeData(updatedData Header) {
 		log.Println(err)
 		return
 	}
+}
+
+func buildHeader() Header {
+	// @TODO: generate hash and salt from users master password
+	var accounts []Account
+	var masterPass string
+	fmt.Println("Please enter your master password, strongbox does not keep this!")
+	fmt.Println("It is up to you to remember this one...")
+	fmt.Scan(&masterPass)
+
+	hash, err := crypt.GenerateHash([]byte(masterPass))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	salt := crypt.GenerateKey(32)
+	fmt.Println(len(salt))
+
+	header := Header{
+		Hk:       string(hash),
+		Sk:       salt,
+		Accounts: accounts,
+	}
+
+	return header
 }
 
 // @TODO - func exportDb
