@@ -33,7 +33,7 @@ var versionCmd = &cobra.Command{
 			log.Fatal("Cannot load config: ", err)
 		}
 
-		fmt.Println("strongbox version: ", config.Version)
+		fmt.Println("Strongbox version: ", config.Version)
 	},
 }
 
