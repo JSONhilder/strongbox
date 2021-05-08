@@ -37,7 +37,7 @@ var saveCmd = &cobra.Command{
 			Name:     args[0],
 			Username: args[1],
 			Password: args[2],
-			Url:      "",
+			Url:      "null",
 		}
 
 		if len(args) == 4 {
