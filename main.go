@@ -16,7 +16,7 @@ func init() {
 		log.Println("No config file found.")
 	}
 
-	if os.Args[1] != "version" {
+	if os.Args[1] != "version" && os.Args[1] != "help" {
 		database.OpenDb(config)
 		if database.GainAccess() == true {
 			return
