@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"syscall"
 
 	"github.com/JSONhilder/strongbox/internal/crypt"
 	"github.com/JSONhilder/strongbox/internal/utils"
+	"golang.org/x/crypto/ssh/terminal"
 )
 
 // Header is the main structure for the embedded "database"
@@ -127,13 +129,12 @@ func buildHeader() Header {
 }
 
 func GainAccess() bool {
-	var input string
 	fmt.Println("Please enter your master password:")
-	fmt.Scan(&input)
-	master := []byte(input)
+	password, _ := terminal.ReadPassword(int(syscall.Stdin))
+	master := []byte(password)
 
 	if crypt.VerifyHash(strongbox.Hk, master) == true {
-		verification = input
+		verification = string(password)
 		return true
 	}
 
