@@ -16,8 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/JSONhilder/strongbox/internal/database"
 	"github.com/spf13/cobra"
 )
@@ -31,8 +29,6 @@ var saveCmd = &cobra.Command{
 	`,
 	Args: cobra.MinimumNArgs(3),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("save called")
-
 		newAccount := database.Account{
 			Name:     args[0],
 			Username: args[1],
