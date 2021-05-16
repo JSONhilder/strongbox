@@ -37,12 +37,6 @@ func OpenDb(config *utils.Config) {
 		log.Fatal("Cannot load config: ", err)
 	}
 
-	// Checks if file exists first, if not create new one
-	if !fileExists(config.FilePath) {
-		// @TODO: generate hash and salt from users master password
-		createStrongbox(config.FilePath)
-	}
-
 	f, err := os.Open(config.FilePath)
 	if err != nil {
 		log.Fatal(err)
@@ -60,7 +54,7 @@ func OpenDb(config *utils.Config) {
 
 }
 
-func fileExists(filename string) bool {
+func FileExists(filename string) bool {
 	_, err := os.Stat(filename)
 	if os.IsNotExist(err) {
 		return false
@@ -68,7 +62,7 @@ func fileExists(filename string) bool {
 	return true
 }
 
-func createStrongbox(filename string) {
+func CreateStrongbox(filename string) {
 	header := buildHeader()
 
 	f, err := os.Create(filename)
