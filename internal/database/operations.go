@@ -49,14 +49,16 @@ func CreateAccount(newAccount Account) {
 		}
 		strongbox.Accounts = append(strongbox.Accounts, encrypted)
 		writeData(strongbox)
+
+		fmt.Printf("%s account has been created.", newAccount.Name)
 		return
 	}
 
-	fmt.Printf("An account with name: %s already exists.", newAccount.Name)
+	fmt.Printf("An account with name \"%s\" already exists.", newAccount.Name)
 }
 
 func EditAccount(name string) {
-	index, found, _ := doesAccountExist(name)
+	index, found, key := doesAccountExist(name)
 
 	if found == true {
 		account := strongbox.Accounts[index]
@@ -65,29 +67,30 @@ func EditAccount(name string) {
 		var url string
 
 		fmt.Println("Edit to update or leave blank to not change.")
-		fmt.Printf("username: %s\n", account.Username)
-		fmt.Scanln(&username)
+		fmt.Printf("username: %s\n", crypt.DecryptKey(account.Username, key))
+		fmt.Scan(&username)
 
-		fmt.Printf("password: %s\n", account.Password)
-		fmt.Scanln(&password)
+		fmt.Printf("password: %s\n", crypt.DecryptKey(account.Password, key))
+		fmt.Scan(&password)
 
-		fmt.Printf("url: %s\n", account.Url)
-		fmt.Scanln(&url)
+		fmt.Printf("url: %s\n", crypt.DecryptKey(account.Url, key))
+		fmt.Scan(&url)
 
 		if len(username) != 0 {
-			account.Username = username
+			account.Username = crypt.EncryptKey(username, key)
 		}
 
 		if len(password) != 0 {
-			account.Password = password
+			account.Password = crypt.EncryptKey(password, key)
 		}
 
 		if len(url) != 0 {
-			account.Url = url
+			account.Url = crypt.EncryptKey(url, key)
 		}
 
 		strongbox.Accounts[index] = account
 		writeData(strongbox)
+		fmt.Printf("%s has been updated.", name)
 
 		return
 	}
