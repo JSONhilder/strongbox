@@ -2,6 +2,9 @@ package database
 
 import (
 	"fmt"
+	"os/exec"
+	"runtime"
+	"strconv"
 
 	"github.com/JSONhilder/strongbox/internal/crypt"
 )
@@ -22,16 +25,38 @@ func ListAccounts() {
 }
 
 func GetAccount(name string) {
+	// text to clipboarb win10 echo mytext | clip
+	// text to clipboarb macOS echo mytext | pbcopy
+	// Need to figure out a work around for linux
 	index, found, key := doesAccountExist(name)
 
 	if found == true {
+		var arg string
 		account := strongbox.Accounts[index]
 		fmt.Printf(
-			"username: %s \npassword: %s \nurl: %s",
+			"username: %s \npassword: %s \nurl: %s\n",
 			crypt.DecryptKey(account.Username, key),
 			crypt.DecryptKey(account.Password, key),
 			crypt.DecryptKey(account.Url, key),
 		)
+
+		// Copy the password to the clipboard
+		if runtime.GOOS == "windows" {
+			arg = "echo " + crypt.DecryptKey(account.Password, key) + "| clip"
+		}
+
+		if runtime.GOOS == "darwin" {
+			arg = "echo " + crypt.DecryptKey(account.Password, key) + "| pbcopy"
+		}
+
+		cmd := exec.Command("cmd", "/C", arg)
+		err := cmd.Start()
+
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+
+		fmt.Println("Password copied to clipboard.")
 		return
 	}
 	fmt.Printf("Could not find account with name: %s", name)
@@ -41,6 +66,18 @@ func CreateAccount(newAccount Account) {
 	_, found, key := doesAccountExist(newAccount.Name)
 
 	if found == false {
+		// Check for password generator key
+		if newAccount.Password[:4] == "gen=" {
+			fmt.Println("generating password")
+			num, err := strconv.Atoi(newAccount.Password[4:])
+			if err != nil {
+				fmt.Println("Invalid number ranger please use gen=<valid number>")
+				return
+			}
+			pass := crypt.GenerateKey(num)
+			newAccount.Password = pass
+		}
+
 		encrypted := Account{
 			Name:     crypt.EncryptKey(newAccount.Name, key),
 			Username: crypt.EncryptKey(newAccount.Username, key),
