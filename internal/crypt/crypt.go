@@ -9,7 +9,7 @@ import (
 	"io"
 	"log"
 	"math/rand"
-	"strings"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -35,19 +35,20 @@ func VerifyHash(hash string, plainPwd []byte) bool {
 }
 
 func GenerateKey(strength int) string {
-	chars := []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ" +
-		"abcdefghijklmnopqrstuvwxyzåäö" +
-		"0123456789")
+	var seededRand *rand.Rand = rand.New(rand.NewSource(time.Now().UnixNano()))
+
+	charset := "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+		"abcdefghijklmnopqrstuvwxyz" +
+		"0123456789"
 
 	length := strength
 
-	var key strings.Builder
-
-	for i := 0; i < length; i++ {
-		key.WriteRune(chars[rand.Intn(len(chars))])
+	b := make([]byte, length)
+	for i := range b {
+		b[i] = charset[seededRand.Intn(len(charset))]
 	}
 
-	return key.String()
+	return string(b)
 }
 
 func EncryptKey(text, key string) string {
