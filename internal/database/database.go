@@ -3,8 +3,10 @@ package database
 import (
 	"encoding/gob"
 	"fmt"
+	"io"
 	"log"
 	"os"
+	"runtime"
 	"syscall"
 
 	"github.com/JSONhilder/strongbox/internal/crypt"
@@ -141,4 +143,52 @@ func constructKey() string {
 	return pk
 }
 
-// @TODO - func exportDb
+func ExportDb(dst string) {
+	var src string
+	var newfile string
+	config, err := utils.LoadConfig(".")
+	if err != nil {
+		log.Fatal("Cannot load config: ", err)
+	}
+
+	src = config.FilePath
+	if runtime.GOOS == "windows" {
+		newfile = dst + "\\strongbox"
+	} else {
+		newfile = dst + "/strongbox"
+	}
+
+	copyFile(src, newfile)
+
+	fmt.Println("Strongbox successfully exported db file.")
+}
+
+func ImportDb(src string) {
+	config, err := utils.LoadConfig(".")
+	if err != nil {
+		log.Fatal("Cannot load config: ", err)
+	}
+
+	copyFile(src, config.FilePath)
+
+	fmt.Println("Strongbox successfully imported db file.")
+}
+
+func copyFile(src, dst string) {
+	from, err := os.Open(src)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer from.Close()
+
+	to, err := os.Create(dst)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer to.Close()
+
+	_, err = io.Copy(to, from)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
