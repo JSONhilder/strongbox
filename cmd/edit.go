@@ -8,8 +8,8 @@ import (
 // editCmd represents the edit command
 var editCmd = &cobra.Command{
 	Use:   "edit",
-	Short: "Edit specified account details from stronbox",
-	Long:  `Edit specified account details from stronbox`,
+	Short: "Edit specified account details from strongbox",
+	Long:  `Edit specified account details from strongbox`,
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		database.EditAccount(args[0])

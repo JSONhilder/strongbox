@@ -16,10 +16,10 @@ strongbox [command]
 Use "strongbox [command] --help" for more information about a command.
 
 Available Commands:
-  delete      Delete account by name from stronbox
-  edit        Edit specified account details from stronbox
+  delete      Delete account by name from strongbox
+  edit        Edit specified account details from strongbox
   export-db   Exported encrypted db file.
-  get         Get account by name from stronbox
+  get         Get account by name from strongbox
   help        Help about any command
   import-db   Import encrypted db file.
   list        Lists all accounts in strongbox

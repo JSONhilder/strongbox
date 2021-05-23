@@ -23,8 +23,8 @@ import (
 // deleteCmd represents the delete command
 var deleteCmd = &cobra.Command{
 	Use:     "delete",
-	Short:   "Delete account by name from stronbox",
-	Long:    `Delete account with passed as argument name from stronbox`,
+	Short:   "Delete account by name from strongbox",
+	Long:    `Delete account with passed as argument name from strongox`,
 	Args:    cobra.MinimumNArgs(1),
 	Example: "strongbox delete <Account Name>",
 	Run: func(cmd *cobra.Command, args []string) {
