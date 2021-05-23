@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -20,7 +19,8 @@ func init() {
 	// Checks if db exists first, if not create new one
 	if !database.FileExists(config.FilePath) {
 		database.CreateStrongbox(config.FilePath)
-		fmt.Println("Database has been created successfully.")
+
+		utils.PrintSuccess("Database has been created successfully.")
 		os.Exit(0)
 	}
 

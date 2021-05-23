@@ -11,6 +11,7 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/JSONhilder/strongbox/internal/utils"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -27,7 +28,7 @@ func VerifyHash(hash string, plainPwd []byte) bool {
 	byteHash := []byte(hash)
 	err := bcrypt.CompareHashAndPassword(byteHash, plainPwd)
 	if err != nil {
-		fmt.Println("Incorrect password.")
+		utils.PrintError("Incorrect password, access denied.")
 		return false
 	}
 

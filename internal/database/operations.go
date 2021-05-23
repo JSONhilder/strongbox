@@ -7,12 +7,13 @@ import (
 	"strconv"
 
 	"github.com/JSONhilder/strongbox/internal/crypt"
+	"github.com/JSONhilder/strongbox/internal/utils"
 )
 
 func ListAccounts() {
 	key := constructKey()
 	if strongbox.Accounts == nil {
-		fmt.Println("No accounts in database")
+		utils.PrintError("No accounts in database")
 		fmt.Println("Create one with the save command")
 		return
 	}
@@ -56,10 +57,11 @@ func GetAccount(name string) {
 			fmt.Println(err.Error())
 		}
 
-		fmt.Println("Password copied to clipboard.")
+		utils.PrintSuccess("Password copied to clipboard.")
 		return
 	}
-	fmt.Printf("Could not find account with name: %s", name)
+
+	utils.PrintError("Could not find account with name: " + name)
 }
 
 func CreateAccount(newAccount Account) {
@@ -71,7 +73,7 @@ func CreateAccount(newAccount Account) {
 			fmt.Println("generating password")
 			num, err := strconv.Atoi(newAccount.Password[4:])
 			if err != nil {
-				fmt.Println("Invalid number ranger please use gen=<valid number>")
+				utils.PrintError("Invalid number ranger please use gen=<valid number>")
 				return
 			}
 			pass := crypt.GenerateKey(num)
@@ -87,11 +89,11 @@ func CreateAccount(newAccount Account) {
 		strongbox.Accounts = append(strongbox.Accounts, encrypted)
 		writeData(strongbox)
 
-		fmt.Printf("%s account has been created.", newAccount.Name)
+		utils.PrintSuccess("account has been created: " + newAccount.Name)
 		return
 	}
 
-	fmt.Printf("An account with name \"%s\" already exists.", newAccount.Name)
+	utils.PrintError("An account with name: " + newAccount.Name + " already exists.")
 }
 
 func EditAccount(name string) {
@@ -132,8 +134,7 @@ func EditAccount(name string) {
 		return
 	}
 
-	fmt.Printf("No account with name: %s exists.", name)
-
+	utils.PrintError("No account with name: " + name + " exists.")
 }
 
 func DeleteAccount(name string) {
@@ -145,7 +146,7 @@ func DeleteAccount(name string) {
 		return
 	}
 
-	fmt.Printf("No account with name: %s exists.", name)
+	utils.PrintError("No account with name: " + name + " exists.")
 }
 
 func doesAccountExist(name string) (index int, found bool, skey string) {

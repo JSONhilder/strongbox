@@ -105,8 +105,9 @@ func buildHeader() Header {
 	// @TODO: generate hash and salt from users master password
 	var accounts []Account
 	var masterPass string
-	fmt.Println("Please enter your master password, strongbox does not keep this!")
-	fmt.Println("It is up to you to remember this one...")
+	utils.PrintLogo()
+	fmt.Println("Please enter your master password, strongbox does not store this.")
+	utils.PrintWarn("It is up to you to remember this one, leave the rest to strongbox!")
 	fmt.Scan(&masterPass)
 
 	hash, err := crypt.GenerateHash([]byte(masterPass))
@@ -160,7 +161,7 @@ func ExportDb(dst string) {
 
 	copyFile(src, newfile)
 
-	fmt.Println("Strongbox successfully exported db file.")
+	utils.PrintSuccess("Strongbox successfully exported db file.")
 }
 
 func ImportDb(src string) {
@@ -171,7 +172,7 @@ func ImportDb(src string) {
 
 	copyFile(src, config.FilePath)
 
-	fmt.Println("Strongbox successfully imported db file.")
+	utils.PrintSuccess("Strongbox successfully imported db file.")
 }
 
 func copyFile(src, dst string) {
