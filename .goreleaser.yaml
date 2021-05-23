@@ -1,4 +1,4 @@
-project_name: strongbox cli
+project_name: strongbox
 
 builds:
   - env: [CGO_ENABLED=0]
@@ -9,3 +9,8 @@ builds:
     goarch:
       - amd64
       - arm64
+
+archives:
+  format_overrides:
+      - goos: windows
+        format: zip
