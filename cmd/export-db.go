@@ -26,7 +26,7 @@ var exportDbCmd = &cobra.Command{
 	Short:   "Exported encrypted db file.",
 	Long:    `Exported encrypted db file to provided absolute path.`,
 	Args:    cobra.MinimumNArgs(1),
-	Example: "strongbox export-db C:\\Users\\Username\\Documents",
+	Example: "strongbox export-db C:\\Path\\To\\Directory\\",
 	Run: func(cmd *cobra.Command, args []string) {
 		database.ExportDb(args[0])
 	},

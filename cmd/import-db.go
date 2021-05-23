@@ -26,7 +26,7 @@ var importDbCmd = &cobra.Command{
 	Short:   "Import encrypted db file.",
 	Long:    `Import encrypted db file user has passed in.`,
 	Args:    cobra.MinimumNArgs(1),
-	Example: "strongbox import-db C:\\Users\\Username\\Documents\\strongbox",
+	Example: "strongbox import-db C:\\Path\\To\\Directory\\",
 	Run: func(cmd *cobra.Command, args []string) {
 		database.ImportDb(args[0])
 	},

@@ -16,20 +16,18 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/JSONhilder/strongbox/internal/database"
 	"github.com/spf13/cobra"
 )
 
 // deleteCmd represents the delete command
 var deleteCmd = &cobra.Command{
-	Use:   "delete",
-	Short: "Delete account by name from stronbox",
-	Long:  `Delete account with passed as argument name from stronbox`,
-	Args:  cobra.MinimumNArgs(1),
+	Use:     "delete",
+	Short:   "Delete account by name from stronbox",
+	Long:    `Delete account with passed as argument name from stronbox`,
+	Args:    cobra.MinimumNArgs(1),
+	Example: "strongbox delete <Account Name>",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("delete called")
 		database.DeleteAccount(args[0])
 	},
 }

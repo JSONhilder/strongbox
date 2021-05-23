@@ -24,8 +24,15 @@ import (
 var saveCmd = &cobra.Command{
 	Use:   "save",
 	Short: "Save new entry to strongbox accounts",
-	Long: `Save a new entry with:
-	name username password url(optional)
+	Long: `Save a new entry with given details
+	Can also generate passwords by using gen=passwordLength (gen=25)
+	`,
+	Example: `
+	strongbox save <Account Name> <username> <password> <optional url>
+
+	Strongbox can generate a password for you:
+	strongbox save <Account Name> <username> gen=30 <optional url>
+	
 	`,
 	Args: cobra.MinimumNArgs(3),
 	Run: func(cmd *cobra.Command, args []string) {
