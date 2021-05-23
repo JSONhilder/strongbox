@@ -13,5 +13,5 @@ builds:
 archives:
 - format: gz
   format_overrides:
-      - goos: windows
-        format: zip
+    - goos: windows
+      format: zip
