@@ -7,8 +7,8 @@ import (
 
 var getCmd = &cobra.Command{
 	Use:   "get",
-	Short: "Get account by name from stronbox",
-	Long:  `Get account with passed as argument name from stronbox`,
+	Short: "Get account by name from strongbox",
+	Long:  `Get account with passed as argument name from strongbox`,
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		database.GetAccount(args[0])
