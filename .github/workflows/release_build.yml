@@ -11,12 +11,7 @@ permissions:
 jobs:
   goreleaser:
     runs-on: ubuntu-latest
-  
-    goos:
-      - darwin
-      - linux
-      - windows
-      
+    
     steps:
       -
         name: Checkout
