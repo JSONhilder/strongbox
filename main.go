@@ -24,6 +24,10 @@ func init() {
 		os.Exit(0)
 	}
 
+	if os.Args[1] == "version" || os.Args[1] == "help" {
+		utils.PrintLogo()
+	}
+
 	if os.Args[1] != "version" && os.Args[1] != "help" {
 		database.OpenDb(config)
 		if database.GainAccess() == true {
