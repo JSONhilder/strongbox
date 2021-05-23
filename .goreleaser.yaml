@@ -11,6 +11,7 @@ builds:
       - arm64
 
 archives:
+- format: gz
   format_overrides:
       - goos: windows
         format: zip
