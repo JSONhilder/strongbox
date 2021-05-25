@@ -17,9 +17,8 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 
-	"github.com/JSONhilder/strongbox/internal/utils"
+	"github.com/JSONhilder/strongbox/internal/database"
 	"github.com/spf13/cobra"
 )
 
@@ -28,12 +27,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Current Strongbox version",
 	Run: func(cmd *cobra.Command, args []string) {
-		config, err := utils.LoadConfig(".")
-		if err != nil {
-			log.Fatal("Cannot load config: ", err)
-		}
-
-		fmt.Println("Version: ", config.Version)
+		fmt.Println("Version: ", database.DatabaseDetails.Version)
 	},
 }
 

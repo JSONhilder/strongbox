@@ -29,25 +29,27 @@ type Account struct {
 	Url      string
 }
 
+var DatabaseDetails = struct {
+	Version  string
+	Filepath string
+}{
+	Version:  "1.0.0",
+	Filepath: "./strongbox",
+}
+
 var strongbox Header
 var verification string
 
 // OpenDb -
-func OpenDb(config *utils.Config) {
-	config, err := utils.LoadConfig(".")
-	if err != nil {
-		log.Fatal("Cannot load config: ", err)
-	}
+func OpenDb() {
+	f, err := os.Open(DatabaseDetails.Filepath)
 
-	f, err := os.Open(config.FilePath)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer f.Close()
 
 	dec := gob.NewDecoder(f)
-	// @TODO: before initialising global strongbox check the header has what it
-	// needs
 
 	// Send data to global strongbox
 	if err := dec.Decode(&strongbox); err != nil {
@@ -82,12 +84,7 @@ func CreateStrongbox(filename string) {
 }
 
 func writeData(updatedData Header) {
-	config, err := utils.LoadConfig(".")
-	if err != nil {
-		log.Fatal("Cannot load config: ", err)
-	}
-
-	f, err := os.Create(config.FilePath)
+	f, err := os.Create(DatabaseDetails.Filepath)
 	if err != nil {
 		return
 	}
@@ -147,12 +144,8 @@ func constructKey() string {
 func ExportDb(dst string) {
 	var src string
 	var newfile string
-	config, err := utils.LoadConfig(".")
-	if err != nil {
-		log.Fatal("Cannot load config: ", err)
-	}
 
-	src = config.FilePath
+	src = DatabaseDetails.Filepath
 	if runtime.GOOS == "windows" {
 		newfile = dst + "\\strongbox"
 	} else {
@@ -165,12 +158,7 @@ func ExportDb(dst string) {
 }
 
 func ImportDb(src string) {
-	config, err := utils.LoadConfig(".")
-	if err != nil {
-		log.Fatal("Cannot load config: ", err)
-	}
-
-	copyFile(src, config.FilePath)
+	copyFile(src, DatabaseDetails.Filepath)
 
 	utils.PrintSuccess("Strongbox successfully imported db file.")
 }

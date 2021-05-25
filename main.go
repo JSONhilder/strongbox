@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 
 	"github.com/JSONhilder/strongbox/cmd"
@@ -10,15 +9,9 @@ import (
 )
 
 func init() {
-	// Setup/Run anything needed before cli executes
-	config, err := utils.LoadConfig(".")
-	if err != nil {
-		log.Println("No config file found.")
-	}
-
 	// Checks if db exists first, if not create new one
-	if !database.FileExists(config.FilePath) {
-		database.CreateStrongbox(config.FilePath)
+	if !database.FileExists(database.DatabaseDetails.Filepath) {
+		database.CreateStrongbox(database.DatabaseDetails.Filepath)
 
 		utils.PrintSuccess("Database has been created successfully.")
 		os.Exit(0)
@@ -29,7 +22,7 @@ func init() {
 	}
 
 	if os.Args[1] != "version" && os.Args[1] != "help" {
-		database.OpenDb(config)
+		database.OpenDb()
 		if database.GainAccess() == true {
 			return
 		} else {
