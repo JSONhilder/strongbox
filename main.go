@@ -14,6 +14,7 @@ func init() {
 	config, err := utils.LoadConfig(".")
 	if err != nil {
 		log.Println("No config file found.")
+		os.Exit(-1)
 	}
 
 	// Checks if db exists first, if not create new one
