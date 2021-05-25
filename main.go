@@ -12,7 +12,6 @@ func init() {
 	// Checks if db exists first, if not create new one
 	if !database.FileExists(database.DatabaseDetails.Filepath) {
 		database.CreateStrongbox(database.DatabaseDetails.Filepath)
-
 		utils.PrintSuccess("Database has been created successfully.")
 		os.Exit(0)
 	}
