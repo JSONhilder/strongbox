@@ -1,18 +1,17 @@
 package utils
 
 import (
+	_ "embed"
 	"fmt"
-	"io/ioutil"
 	"math"
 )
 
-func PrintLogo() {
-	b, err := ioutil.ReadFile("./logo.txt")
-	if err != nil {
-		panic(err)
-	}
+//go:embed logo.txt
+var logo string
 
-	logo := string(b)
+func PrintLogo() {
+
+	logo := string(logo)
 	for j := 0; j < len(logo); j++ {
 		r, g, b := rgb(j)
 		fmt.Printf("\033[38;2;%d;%d;%dm%c\033[0m", r, g, b, logo[j])
