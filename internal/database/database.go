@@ -34,7 +34,7 @@ var DatabaseDetails = struct {
 	Filepath string
 }{
 	Version:  "1.0.0",
-	Filepath: "./strongbox_db",
+	Filepath: "",
 }
 
 var strongbox Header

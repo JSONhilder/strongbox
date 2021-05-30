@@ -1,7 +1,9 @@
 package main
 
 import (
+	"log"
 	"os"
+	"strings"
 
 	"github.com/JSONhilder/strongbox/cmd"
 	"github.com/JSONhilder/strongbox/internal/database"
@@ -9,6 +11,13 @@ import (
 )
 
 func init() {
+	// Set database path
+	ex, err := os.Executable()
+	if err != nil {
+		log.Fatal(err)
+	}
+	database.DatabaseDetails.Filepath = strings.Replace(ex, "strongbox.exe", "strongbox_db", 1)
+
 	// Checks if db exists first, if not create new one
 	if !database.FileExists(database.DatabaseDetails.Filepath) {
 		database.CreateStrongbox(database.DatabaseDetails.Filepath)
