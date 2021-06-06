@@ -7,6 +7,27 @@ Accounts can have their passwords generated using a specific argument see exampl
 On account fetching passwords will be copied to clipboard.
 ( currently only works on macOs and Windows )
 
+## How to Install :
+
+Windows 10 powershell script:
+(Open powershell in administrator mode)
+```
+$ScriptFromGithHub = Invoke-WebRequest https://raw.githubusercontent.com/JSONhilder/strongbox/main/install_strongbox.ps1
+
+Invoke-Expression $($ScriptFromGithHub.Content)
+```
+Windows 10 direct download:
+* Download latest release from the github repository
+* Extract it to desired directory
+* Add alias to powershell with:
+```
+notepad $PROFILE
+
+then add: 
+
+Set-Alias -Name strongbox -Value path/to/your/extracted/exe
+```
+
 
 ## Usage :
 ```
