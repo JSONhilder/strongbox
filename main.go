@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"strings"
+    "fmt"
 
 	"github.com/JSONhilder/strongbox/cmd"
 	"github.com/JSONhilder/strongbox/internal/database"
@@ -24,6 +25,12 @@ func init() {
 		utils.PrintSuccess("Database has been created successfully.")
 		os.Exit(0)
 	}
+
+    if len(os.Args) == 1 {
+        utils.PrintLogo()
+        fmt.Println("No command found, for help type strongbox help")
+        os.Exit(0)
+    }
 
 	if os.Args[1] == "version" || os.Args[1] == "help" {
 		utils.PrintLogo()
