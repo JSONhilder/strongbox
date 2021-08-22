@@ -33,7 +33,7 @@ var DatabaseDetails = struct {
 	Version  string
 	Filepath string
 }{
-	Version:  "1.0.0",
+	Version:  "1.0.1",
 	Filepath: "",
 }
 
