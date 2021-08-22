@@ -25,8 +25,6 @@ func init() {
 		database.DatabaseDetails.Filepath = strings.Replace(ex, "strongbox.exe", "strongbox_db", 1)
 	}
 
-	fmt.Println(ex)
-	fmt.Println(database.DatabaseDetails)
 	// Checks if db exists first, if not create new one
 	if !database.FileExists(database.DatabaseDetails.Filepath) {
 		database.CreateStrongbox(database.DatabaseDetails.Filepath)
