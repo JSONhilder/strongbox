@@ -7,13 +7,10 @@ exe_path=$HOME'/.strongbox/strongbox'
 echo "Determining latest release"
 
 tag=$(curl --silent $releases/latest | grep -Po '"tag_name": "\K.*?(?=")')
-echo $tag
 
 VERSION=$(echo $tag|cut -c 2-6)
-echo $VERSION
 
 FILE="strongbox_"$VERSION"_linux_amd64.tar.gz"
-echo $FILE
 
 download="https://github.com/"$repo"/releases/download/"$tag"/"$FILE
 
