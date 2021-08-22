@@ -10,7 +10,10 @@ On account fetching passwords will be copied to clipboard.
 ## How to Install :
 
 Linux bash script:
+```
+wget -O install_strongbox https://raw.githubusercontent.com/JSONhilder/strongbox/main/install_strongbox.sh && sh install_strongbox
 
+```
 
 <br>
 

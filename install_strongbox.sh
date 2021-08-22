@@ -3,9 +3,6 @@ repo='JSONhilder/strongbox'
 default_path=$HOME'/.strongbox'
 releases="https://api.github.com/repos/"$repo/"releases"
 exe_path=$HOME'/.strongbox/strongbox'
-bash_rc="~/.bashrc"
-zsh_rc="~/.zshrc"
-
 
 echo "Determining latest release"
 
