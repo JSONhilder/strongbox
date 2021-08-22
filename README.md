@@ -9,6 +9,11 @@ On account fetching passwords will be copied to clipboard.
 
 ## How to Install :
 
+Linux bash script:
+
+
+<br>
+
 Windows 10 powershell script:
 (Open powershell in administrator mode)
 ```
